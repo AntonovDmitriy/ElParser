@@ -10,6 +10,7 @@ import com.antonov.elparser.pojo.User;
 import com.antonov.elparser.pojo.UserInfo;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.DefaultCredentialsProvider;
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.DomAttr;
 import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
@@ -51,7 +52,6 @@ public class ElParser {
 //
 //        final DefaultCredentialsProvider credentialsProvider = (DefaultCredentialsProvider) webClient.getCredentialsProvider();
 //        credentialsProvider.addCredentials("antonovdi", "rgdcjh4q");
-
     }
 
     public void doAction() throws Exception {
@@ -134,8 +134,12 @@ public class ElParser {
     private void fillListLinkUserFromPane(List<String> result, HtmlPage page, String university) throws Exception {
 
         try {
-
-            final HtmlTable table = page.getHtmlElementById("restab");
+            final HtmlTable table;
+            try {
+                table = page.getHtmlElementById("restab");
+            } catch (ElementNotFoundException ex) {
+                return;
+            }
             for (final HtmlTableRow row : table.getRows()) {
                 if (row.getIndex() < 3) {
                     continue;

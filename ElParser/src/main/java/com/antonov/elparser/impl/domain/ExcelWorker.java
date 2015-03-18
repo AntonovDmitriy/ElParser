@@ -78,10 +78,12 @@ public class ExcelWorker {
                 Row row = sheet.getRow(i);
                 Cell cell = row.getCell(COLUMN_FIO);
                 String fio = cell.getStringCellValue().trim();
-                user.setFIO(fio);
-                user.setRow(i);
+                if (fio != null && !fio.isEmpty()) {
+                    user.setFIO(fio);
+                    user.setRow(i);
+                    result.add(user);
+                }
 
-                result.add(user);
             }
         } catch (Throwable ex) {
             String message = "При попытке распознавания авторов произошла ошибка";
