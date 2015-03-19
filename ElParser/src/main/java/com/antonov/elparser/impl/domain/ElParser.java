@@ -57,6 +57,8 @@ public class ElParser {
     public void doAction() throws Exception {
 
         String university = excelWorker.getUniversity();
+        
+
         List<User> listUser = excelWorker.getUsers();
 
         getUserInfoFromWebSiteAndFillUserList(university, listUser);
@@ -194,7 +196,7 @@ public class ElParser {
                 info.setAMOUNT_LETTERS(amount);
 
                 HtmlElement hirshAtr = (HtmlElement) page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[15]/td[3]/font").get(0);
-                String hirsh = hirshAtr.asText();
+                Long hirsh = Long.valueOf(hirshAtr.asText());
                 info.setHIRSH(hirsh);
                 result.add(info);
 

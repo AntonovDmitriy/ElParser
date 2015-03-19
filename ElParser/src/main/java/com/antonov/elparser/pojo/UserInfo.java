@@ -12,7 +12,7 @@ package com.antonov.elparser.pojo;
 public class UserInfo {
 
     private Double IMPACT_PUBLISH; 
-    private String HIRSH;
+    private Long HIRSH;
     private String FIO;
 
     public Double getIMPACT_PUBLISH() {
@@ -23,11 +23,11 @@ public class UserInfo {
         this.IMPACT_PUBLISH = IMPACT_PUBLISH;
     }
 
-    public String getHIRSH() {
+    public Long getHIRSH() {
         return HIRSH;
     }
 
-    public void setHIRSH(String HIRSH) {
+    public void setHIRSH(Long HIRSH) {
         this.HIRSH = HIRSH;
     }
 

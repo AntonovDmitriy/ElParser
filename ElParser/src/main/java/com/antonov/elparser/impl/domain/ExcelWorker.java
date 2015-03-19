@@ -29,7 +29,7 @@ public class ExcelWorker {
     private final String filePath;
     private final Logger logger = LoggerFactory.getLogger(getClass().getCanonicalName());
 
-    private static final int HEADER_HEIGHT = 3;
+    private static final int HEADER_HEIGHT = 4;
     private static final int COLUMN_UNIVERSITY = 0;
     private static final int ROW_UNIVERSITY = 0;
 
@@ -107,7 +107,7 @@ public class ExcelWorker {
 
                 if (info != null) {
                     Long amountLetters = info.getAMOUNT_LETTERS();
-                    String hirsh = info.getHIRSH();
+                    Long hirsh = info.getHIRSH();
                     Double impactPublish = info.getIMPACT_PUBLISH();
 
                     if (amountLetters != null) {
