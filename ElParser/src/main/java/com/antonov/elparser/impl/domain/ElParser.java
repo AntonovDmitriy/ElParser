@@ -191,7 +191,11 @@ public class ElParser {
                 String fio = fioAtr.asText();
                 info.setFIO(fio);
 
-                HtmlElement amountAtr = (HtmlElement) page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[4]/td[3]/font/a").get(0);
+                List listAmount = page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[4]/td[3]/font/a");
+                if(listAmount==null || listAmount.size()==0){
+                    listAmount = page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[4]/td[3]/font");
+                }
+                HtmlElement amountAtr = (HtmlElement) listAmount.get(0);
                 Long amount = Long.valueOf(amountAtr.asText());
                 info.setAMOUNT_LETTERS(amount);
 
