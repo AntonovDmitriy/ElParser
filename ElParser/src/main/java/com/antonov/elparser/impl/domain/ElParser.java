@@ -57,7 +57,6 @@ public class ElParser {
     public void doAction() throws Exception {
 
         String university = excelWorker.getUniversity();
-        
 
         List<User> listUser = excelWorker.getUsers();
 
@@ -149,10 +148,11 @@ public class ElParser {
 
                 if (row.getCell(2).asXml().contains(university)) {
                     List a = row.getCell(3).getElementsByAttribute("a", "title", "Анализ публикационной активности автора");
-                    HtmlAnchor anchor = (HtmlAnchor) a.get(0);
-                    String value = anchor.getAttribute("href");
-                    result.add("http://elibrary.ru/" + value);
-
+                    if (!a.isEmpty()) {
+                        HtmlAnchor anchor = (HtmlAnchor) a.get(0);
+                        String value = anchor.getAttribute("href");
+                        result.add("http://elibrary.ru/" + value);
+                    }
                 }
             }
 
@@ -192,7 +192,7 @@ public class ElParser {
                 info.setFIO(fio);
 
                 List listAmount = page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[4]/td[3]/font/a");
-                if(listAmount==null || listAmount.size()==0){
+                if (listAmount == null || listAmount.size() == 0) {
                     listAmount = page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[4]/td[3]/font");
                 }
                 HtmlElement amountAtr = (HtmlElement) listAmount.get(0);
