@@ -87,15 +87,24 @@ public class ElParser {
     private void getUserInfoFromWebSiteAndFillUserList(String university, List<User> listUser) throws Exception {
 
         try {
+            
+            // Перебираем все ФИО полученные выше
             for (User user : listUser) {
 
+                // Заходим на стартовую страницу
                 HtmlPage page = webClient.getPage(URL_START);
 
+                // Вбиваем фамилию пользователя и нажимаем ПОИСК
                 HtmlPage resultPage = fillFioAUserndClickSearch(page, user);
 
+                // Получаем информацию о пользователях и осуществляем фильтрацию по университету
                 List<UserInfo> listUserInfo = getListUserInfoOnResultPageByUniversity(resultPage, university);
 
+                // Если что-то нашли, то добавляем нужные данные в сущность User
                 if (listUserInfo != null && listUserInfo.size() > 0) {
+                    
+                    // Если пользователей больше чем 1, берем первого. В будущем можно брать всех, но вероятность этого
+                    // очень маленькая, пока это не сделано.
                     if (listUserInfo.size() > 1) {
                         user.setInfo(listUserInfo.get(0));   // доделать в будущем!!!!!!!!!!!!!!!!!!!!
                     } else {
@@ -133,6 +142,10 @@ public class ElParser {
 
         try {
             List<String> listLinkToUserInfo = new ArrayList<>();
+            
+            // Получаем все ссылки на страницы с информацией об авторах с введенным ФИО и отфильтровываем только те, у которых
+            // университет совпадает с необходимым
+            //Если авторов много, то проходим по всем страницам
             while (true) {
                 fillListLinkUserFromPane(listLinkToUserInfo, resultPage, university);
                 resultPage = getNextPage(resultPage);
@@ -141,6 +154,7 @@ public class ElParser {
                 }
             }
 
+            // Получаем нужную информацию по полученным выше ссылкам
             listUserInfo = getUserInfoByLink(listLinkToUserInfo, webClient);
         } catch (Throwable ex) {
             String message = "При получении информации о пользователе произошла ошибка";
@@ -164,6 +178,7 @@ public class ElParser {
                     continue;
                 }
 
+                // Если видим, что рядом с нашим человеком нужный нам университет, сохраняем ссылку на информацию о нем в список
                 if (row.getCell(2).asXml().contains(university)) {
                     List a = row.getCell(3).getElementsByAttribute("a", "title", "Анализ публикационной активности автора");
                     if (!a.isEmpty()) {
@@ -201,6 +216,8 @@ public class ElParser {
         List<UserInfo> result = new ArrayList<>();
 
         try {
+            
+            // Заходим по каждой из полученной ранее ссылок на страницы с информацией о людях
             for (String urlUserInfo : listLinkUserInfo) {
 
                 UserInfo info = new UserInfo();
@@ -209,6 +226,7 @@ public class ElParser {
                 String fio = fioAtr.asText();
                 info.setFIO(fio);
 
+                // Вытаскиваем число публикаций записываем в UserInfo
                 List listAmount = page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[4]/td[3]/font/a");
                 if (listAmount == null || listAmount.size() == 0) {
                     listAmount = page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[4]/td[3]/font");
@@ -217,11 +235,13 @@ public class ElParser {
                 Long amount = Long.valueOf(amountAtr.asText());
                 info.setAMOUNT_LETTERS(amount);
 
+                // Вытаскиваем индекс Хирша записываем в UserInfo
                 HtmlElement hirshAtr = (HtmlElement) page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[15]/td[3]/font").get(0);
                 Long hirsh = Long.valueOf(hirshAtr.asText());
                 info.setHIRSH(hirsh);
                 result.add(info);
 
+                 // Вытаскиваем импакт записываем в UserInfo
                 HtmlElement impact = (HtmlElement) page.getByXPath("//*[@id=\"thepage\"]/table/tbody/tr/td/table[1]/tbody/tr/td[2]/form/table/tbody/tr[2]/td[1]/table[2]/tbody/tr[36]/td[3]/font").get(0);
                 Double impactDouble = Double.valueOf(impact.asText().replaceAll(",", "."));
                 info.setIMPACT_PUBLISH(impactDouble);
