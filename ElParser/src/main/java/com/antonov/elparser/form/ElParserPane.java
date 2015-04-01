@@ -177,6 +177,7 @@ public class ElParserPane extends javax.swing.JFrame {
         }
         );
 
+        // Нажимаем на кнопку старт.
         btStart.addActionListener(new ActionListener() {
 
             @Override
