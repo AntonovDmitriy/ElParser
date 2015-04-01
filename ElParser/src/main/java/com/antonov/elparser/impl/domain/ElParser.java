@@ -42,10 +42,19 @@ public class ElParser {
 
     private final Logger logger = LoggerFactory.getLogger(getClass().getCanonicalName());
 
+
+    // "Конструктор' парсера. При создании обьекта парсера, создаем еще две сущности, с которыми он будет общаться.
     public ElParser(PElParserParams params) {
+        
+        // Запомнили параметры от пользователя
         this.params = params;
 
+        // excelWorker умеет работать с нашими файлами кафедр и знает как туда писать и как читать данные. Передаем в него 
+        // путь до файла
+        
         excelWorker = new ExcelWorker(params.getFILE_EXCEL_PATH());
+        
+        // webClient Осуществляет доступ к сайту, эмулируя поведения пользователя
         webClient = new WebClient();
 
 //        webClient = new WebClient(BrowserVersion.getDefault(), "iron.inversion.ru", 8080);
@@ -54,15 +63,24 @@ public class ElParser {
 //        credentialsProvider.addCredentials("antonovdi", "rgdcjh4q");
     }
 
+
+
+    // Итак, парсер начинает работу. 
     public void doAction() throws Exception {
 
+        // Вытащили университет из файла
         String university = excelWorker.getUniversity();
 
+        // Получили список людей из файла, просто с ФИО
         List<User> listUser = excelWorker.getUsers();
 
+        // Распарсили сайт и дополнили список объектов User данными с сайта
         getUserInfoFromWebSiteAndFillUserList(university, listUser);
 
+        // Отключились от сайта
         webClient.closeAllWindows();
+        
+        // Записали в файл
         excelWorker.write(listUser);
     }
 
