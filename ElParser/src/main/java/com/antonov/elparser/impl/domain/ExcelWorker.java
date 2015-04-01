@@ -44,6 +44,7 @@ public class ExcelWorker {
         this.filePath = filePath;
     }
 
+    // Вытаскиваем университет из файла. Пока это 1 строчка  и 1 колонка в файле
     public String getUniversity() throws Exception {
 
         String result = null;
@@ -63,6 +64,8 @@ public class ExcelWorker {
         return result;
     }
 
+    // Вытаскиваем список людей из файла. Отступаем на величину шапки, пока это 4 строчки и начинаем вычитывать из 2 колонки
+    // считаем там находятся фамилии и до конца.
     public List<User> getUsers() throws Exception {
         List<User> result = new ArrayList<>();
         try (FileInputStream is = new FileInputStream(filePath)) {
@@ -93,6 +96,8 @@ public class ExcelWorker {
         return result;
     }
 
+    // Записываем информацию в файл. До этого мы сохранили номера строчек и фамилии. Если у человека мы ничего не нашли
+    // на сайте, то пишем ему нули.
     public void write(List<User> listUser) throws Exception {
 
         try (FileInputStream is = new FileInputStream(filePath)) {
