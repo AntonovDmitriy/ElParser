@@ -177,7 +177,7 @@ public class ElParserPane extends javax.swing.JFrame {
         }
         );
 
-        // Нажимаем на кнопку старт.
+        // Запускаем алгоритм парсинга, нажимая на кнопку старт, предварительно введя путь до файла.
         btStart.addActionListener(new ActionListener() {
 
             @Override
@@ -188,6 +188,7 @@ public class ElParserPane extends javax.swing.JFrame {
                     return;
                 }
 
+                // Если путь до файла введен, и файл такой существует идем дальше, иначе ругаемся.
                 if (pojo.getFILE_EXCEL_PATH() != null && new File(pojo.getFILE_EXCEL_PATH()).exists()) {
 
                     try {
@@ -201,10 +202,18 @@ public class ElParserPane extends javax.swing.JFrame {
                             public void run() {
                                 try {
 
+                                    // Создаем объект, который заключает в себе основную функциональность программы за исключением
+                                    // пользовательского интерфейса. Передаем туда введенные пользователем данные.
                                     ElParser parser = new ElParser(pojo);
+                                    
+                                    // Говорим парсеру, делай работу, салага.
                                     parser.doAction();
+                                    
+                                    // Показываем сообщение об успехе.
                                     showFinalMessage();
                                 } catch (Exception ex) {
+                                    
+                                    // Если поймали ошибку, ругаемся.
                                     progressBar.setIndeterminate(false);
                                     handleException(ex);
                                 } finally {
